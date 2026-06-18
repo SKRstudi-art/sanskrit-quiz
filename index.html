@@ -202,6 +202,78 @@
             font-size: 12px; color: #555; font-style: italic;
         }
 
+        /* ── Study notes ── */
+        .study-notes-toggle {
+            width: 100%;
+            margin: 22px 0 0;
+            background: #f3f4ff;
+            color: #40328c;
+            border: 2px solid #d8dcff;
+        }
+        .study-notes-toggle:hover { background: #e9ebff; }
+        .study-notes {
+            margin-top: 14px;
+            padding: 18px;
+            background: #f8f9ff;
+            border: 1px solid #dfe2f5;
+            border-radius: 8px;
+        }
+        .study-notes h2 {
+            margin-bottom: 6px;
+            color: #33266f;
+            font-size: 22px;
+            letter-spacing: 0;
+        }
+        .notes-search {
+            width: 100%;
+            margin: 14px 0;
+            padding: 11px 12px;
+            border: 2px solid #d7d9e5;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .notes-search:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .notes-topic {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #dfe2ed;
+        }
+        .notes-topic:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+        .notes-topic h3 {
+            margin-bottom: 10px;
+            color: #5844a0;
+            font-size: 17px;
+            letter-spacing: 0;
+        }
+        .note-entry {
+            padding: 12px 0;
+            border-bottom: 1px solid #e4e5ed;
+        }
+        .note-entry:last-child { border-bottom: 0; }
+        .note-term {
+            display: block;
+            margin-bottom: 4px;
+            color: #33266f;
+            font-weight: 700;
+        }
+        .note-definition {
+            color: #444;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .notes-empty {
+            padding: 18px 0;
+            text-align: center;
+            color: #777;
+        }
+
         /* ── Misc ── */
         .hidden { display: none !important; }
         .topic-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #999; }
@@ -236,6 +308,22 @@
             </ul>
             <div class="terms-preview" id="termsPreview"></div>
         </div>
+
+        <button class="btn study-notes-toggle" id="studyNotesToggle" onclick="toggleStudyNotes()">
+            📚 Open Study Notes
+        </button>
+        <section class="study-notes hidden" id="studyNotes" aria-label="Sanskrit study notes">
+            <h2>Study Notes</h2>
+            <p style="color:#666; font-size:14px;">Definitions and concept notes organized by topic.</p>
+            <input
+                class="notes-search"
+                id="notesSearch"
+                type="search"
+                placeholder="Search a Sanskrit term or concept"
+                oninput="renderStudyNotes(this.value)"
+            >
+            <div id="studyNotesList"></div>
+        </section>
 
         <p style="text-align:center; color:#888; font-size:13px; margin-bottom:16px;">Filter by topic (optional):</p>
         <div class="topic-filters" id="startTopicFilters"></div>
@@ -578,6 +666,47 @@ function conceptHtml(item) {
     return `<div class="concept-note"><strong>Concept:</strong> ${conceptDefinition(item)}</div>`;
 }
 
+function toggleStudyNotes() {
+    const notes = document.getElementById('studyNotes');
+    const button = document.getElementById('studyNotesToggle');
+    const opening = notes.classList.contains('hidden');
+    notes.classList.toggle('hidden');
+    button.textContent = opening ? '📚 Close Study Notes' : '📚 Open Study Notes';
+    if (opening) {
+        renderStudyNotes(document.getElementById('notesSearch').value);
+        notes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function renderStudyNotes(query = '') {
+    const list = document.getElementById('studyNotesList');
+    if (!list) return;
+    const normalized = query.trim().toLocaleLowerCase();
+    const matches = TERMS.filter(item => {
+        if (!normalized) return true;
+        return `${item.term} ${item.def} ${conceptDefinition(item)} ${item.topic}`
+            .toLocaleLowerCase()
+            .includes(normalized);
+    });
+
+    if (!matches.length) {
+        list.innerHTML = '<div class="notes-empty">No matching study notes found.</div>';
+        return;
+    }
+
+    list.innerHTML = TOPICS.map(topic => {
+        const topicTerms = matches.filter(item => item.topic === topic);
+        if (!topicTerms.length) return '';
+        const entries = topicTerms.map(item => `
+            <article class="note-entry">
+                <span class="note-term">${item.term}</span>
+                <div class="note-definition">${conceptDefinition(item)}</div>
+            </article>
+        `).join('');
+        return `<section class="notes-topic"><h3>${topic}</h3>${entries}</section>`;
+    }).join('');
+}
+
 // ════════════════════════════════
 //  STATE
 // ════════════════════════════════
@@ -617,6 +746,7 @@ function init() {
 
     buildTopicFilters('startTopicFilters');
     buildCountPicker();
+    renderStudyNotes();
 }
 
 function buildTopicFilters(containerId) {
