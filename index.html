@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanskrit Terms Interactive Quiz — Tadatmya Vedanta</title>
+    <title>skrstudio Sanskrit Terms Quiz</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -137,6 +137,10 @@
         .feedback.show { display: block; }
         .feedback.correct { background: #e8f5e9; color: #2e7d32; border-left: 5px solid #43a047; }
         .feedback.incorrect { background: #ffebee; color: #c62828; border-left: 5px solid #e53935; }
+        .concept-note {
+            margin-top: 8px; font-size: 13px; font-weight: 500;
+            color: inherit; opacity: .9;
+        }
 
         /* ── Buttons ── */
         .btn-row { display: flex; gap: 10px; margin-top: 20px; }
@@ -218,8 +222,8 @@
     <!-- ══ START SCREEN ══ -->
     <div id="startScreen">
         <div class="header">
-            <h1>🕉 Sanskrit Terms Quiz</h1>
-            <p>Tadatmya Vedanta Study Guide — 75 terms across 10 topics</p>
+            <h1>🕉 skrstudio Sanskrit Terms Quiz</h1>
+            <p id="termCountSubtitle">Tadatmya Vedanta Study Guide</p>
         </div>
 
         <div class="start-info">
@@ -228,7 +232,7 @@
                 <li><strong>Multiple Choice</strong> — pick the correct definition</li>
                 <li><strong>Fill in the Blank</strong> — type the Sanskrit term from a definition</li>
                 <li><strong>Matching</strong> — pair 6 terms with their definitions</li>
-                <li><strong>Term → Definition</strong> — given a term, choose the right definition</li>
+                <li><strong>Definition → Term</strong> — given a definition, choose the right Sanskrit term</li>
             </ul>
             <div class="terms-preview" id="termsPreview"></div>
         </div>
@@ -251,7 +255,7 @@
     <!-- ══ QUIZ SCREEN ══ -->
     <div id="quizScreen" class="hidden">
         <div class="header">
-            <h1>🕉 Sanskrit Terms Quiz</h1>
+            <h1>🕉 skrstudio Sanskrit Terms Quiz</h1>
         </div>
 
         <!-- Mode selector -->
@@ -413,7 +417,166 @@ const TERMS = [
     { term:"Vairāgya",   topic:"Guru",     def:"Dispassion and non-attachment toward worldly objects" },
 ];
 
+TERMS.push(
+    { term:"Śāstra", topic:"Pramāṇa", def:"Scriptural teachings that convey revealed knowledge of Śrī Hari and spiritual reality" },
+    { term:"Satguru", topic:"Guru", def:"A realized teacher empowered by Śrī Hari to transmit living spiritual knowledge" },
+    { term:"Kaniṣṭha-adhikārī", topic:"Guru", def:"A beginning spiritual seeker whose practice is sincere but still unstable or mixed with worldly motives" },
+    { term:"Madhyama-adhikārī", topic:"Guru", def:"An intermediate seeker with clearer understanding and steadier devotional practice" },
+    { term:"Uttama-adhikārī", topic:"Guru", def:"An advanced seeker whose recognition of Śrī Hari is mature, steady, and deeply internalized" },
+    { term:"Viśeṣaṇa", topic:"Lakṣaṇa", def:"A qualifying attribute that helps define or distinguish an entity" },
+    { term:"Viśeṣya", topic:"Lakṣaṇa", def:"The qualified entity or substantive that possesses attributes" },
+    { term:"Viśiṣṭa", topic:"Lakṣaṇa", def:"A qualified whole: an entity understood together with its defining attributes" },
+    { term:"Sat-cit-ānanda", topic:"Tattva", def:"Existence, consciousness, and bliss; the core spiritual nature of Śrī Hari and the self" },
+    { term:"Jñāna-śakti", topic:"Tattva", def:"The power of knowledge or consciousness" },
+    { term:"Icchā-śakti", topic:"Tattva", def:"The power of will or intention" },
+    { term:"Kriyā-śakti", topic:"Tattva", def:"The power of action or manifestation" },
+    { term:"Bala", topic:"Tattva", def:"Strength or sustaining capacity as a divine quality" },
+    { term:"Vīrya", topic:"Tattva", def:"Potency, vigor, or unfailing power" },
+    { term:"Tejas", topic:"Tattva", def:"Radiance, brilliance, or illuminating force" },
+    { term:"Ojas", topic:"Tattva", def:"Vital splendor, energy, or spiritual vigor" },
+    { term:"Ādi-puruṣa", topic:"Tattva", def:"The primordial manifestation of Śrī Hari, associated with Vāsudeva and the source of later forms" },
+    { term:"Vyūha", topic:"Tattva", def:"A fourfold expansion of Śrī Hari: Vāsudeva, Saṅkarṣaṇa, Pradyumna, and Aniruddha" },
+    { term:"Vibhava", topic:"Tattva", def:"A divine descent or manifestation of Śrī Hari into the world" },
+    { term:"Antaryāmi", topic:"Tattva", def:"Śrī Hari as the indwelling Lord and inner controller in all beings" },
+    { term:"Arca", topic:"Bhakti", def:"Śrī Hari manifest in consecrated form for worship and meditation" },
+    { term:"Nāma", topic:"Bhakti", def:"The divine Name of Śrī Hari, understood as a sonic manifestation of Him" },
+    { term:"Sadāśiva", topic:"Tattva", def:"A divine manifestation associated with Śiva, self-awareness, and the Lord's devotional function" },
+    { term:"Śiva-tattva", topic:"Tattva", def:"The category of Śiva as a distinct divine manifestation and great devotee of the Lord" },
+    { term:"Devī-tattva", topic:"Tattva", def:"The category of Devī and divine feminine manifestations such as Mahā-Lakṣmī" },
+    { term:"Mahā-Lakṣmī", topic:"Tattva", def:"The supreme consort of Nārāyaṇa and a principal manifestation of divine grace" },
+    { term:"Aṣṭa-Lakṣmī", topic:"Tattva", def:"Eight forms of Lakṣmī associated with specific blessings and support" },
+    { term:"Rādhā-tattva", topic:"Tattva", def:"Śrī Rādhā as the personification of devotion, grace, and loving relation to the Lord" },
+    { term:"Yoga-māyā", topic:"Tattva", def:"Divine māyā that veils and reveals in service of the Lord's līlā" },
+    { term:"Āvaraṇa-vāda", topic:"Vāda", def:"The doctrine that māyā covers or conceals reality rather than making it nonexistent" },
+    { term:"Pratibimba-vāda", topic:"Vāda", def:"The reflection model explaining appearance through original, medium, and reflected image" },
+    { term:"Sātikārya-vāda", topic:"Vāda", def:"A cause-effect view in which an effect is linked to its cause while appearing as a distinct manifestation" },
+    { term:"Āvaraṇa-śakti", topic:"Tattva", def:"The covering power that obscures recognition of reality" },
+    { term:"Vikṣepa-śakti", topic:"Tattva", def:"The projecting power that gives rise to misperception and apparent manifestation" },
+    { term:"Prāṇa", topic:"Mind", def:"Vital current governing breath and inward-moving life force" },
+    { term:"Apāna", topic:"Mind", def:"Vital current governing elimination and downward-moving functions" },
+    { term:"Vyāna", topic:"Mind", def:"Vital current distributing energy throughout the body" },
+    { term:"Samāna", topic:"Mind", def:"Vital current balancing digestion and assimilation" },
+    { term:"Udāna", topic:"Mind", def:"Vital current governing upward movement, speech, and transition" },
+    { term:"Sūkṣma-śarīra", topic:"Mind", def:"The subtle body composed of inner faculties, senses, prāṇas, and impressions" },
+    { term:"Kāraṇa-śarīra", topic:"Mind", def:"The causal body or seed condition carrying latent tendencies and karmic causes" },
+    { term:"Asmitā", topic:"Mind", def:"Misidentification of the body and mind as the self" },
+    { term:"Rāga", topic:"Mind", def:"Attachment rooted in remembered pleasure" },
+    { term:"Dveṣa", topic:"Mind", def:"Aversion rooted in remembered pain or discomfort" },
+    { term:"Abhiniveśa", topic:"Mind", def:"Fear of death and clinging to embodied existence" },
+    { term:"Guṇāvatāra", topic:"Tattva", def:"A manifestation of the Lord connected with cosmic qualities or guṇas" },
+    { term:"Puruṣāvatāra", topic:"Tattva", def:"A manifestation of the Lord connected with cosmic creation and the universes" }
+);
+
 const TOPICS = [...new Set(TERMS.map(t => t.topic))];
+
+const TERM_CONCEPTS = {
+    "Śāstra": "The book treats śāstra as the scriptural body that communicates revealed truths about Śrī Hari. It includes texts such as the Upaniṣads, Gītā, and Brahma-sūtra, while recognizing that scriptural statements require coherent siddhānta and living guidance for proper interpretation.",
+    "Sampradāya": "A sampradāya is not merely a historical institution. It is a living transmission in which revealed truth, practice, and grace are carried through a lineage so that the seeker can approach Śrī Hari through an accessible path.",
+    "Satguru": "The satguru is the foundation of inner experience because he reveals the truths of śāstra as lived reality. The text stresses that a satguru is not simply a learned person, but one whose realization of Śrī Hari can awaken trust and recognition in others.",
+    "Guru": "Guru points to the teacher who dispels ignorance and guides the seeker from conceptual understanding toward recognition. In this teaching, the guru's authority rests in revealed knowledge, realization, and the ability to direct the disciple toward Śrī Hari.",
+    "Śiṣya": "The śiṣya is the disciple who receives teaching with receptivity, discernment, and practice. The relationship is not passive: the disciple must test, internalize, and live the teaching.",
+    "Śraddha": "Śraddha is sincere trust in the guru, śāstra, and Śrī Hari. It is not blind belief; it matures as the seeker recognizes truth through practice and experience.",
+    "Mumukṣutva": "Mumukṣutva is the longing for liberation. It gives urgency to practice and keeps the seeker oriented toward the highest goal rather than temporary worldly outcomes.",
+    "Viveka": "Viveka is discriminative discernment, especially the ability to distinguish the real from the unreal and the eternal from the temporary.",
+    "Vairāgya": "Vairāgya is dispassion toward what does not lead to the highest goal. In this path it supports devotion rather than becoming dry withdrawal.",
+    "Kaniṣṭha-adhikārī": "The kaniṣṭha-adhikārī seeks spiritual life but may still be driven by curiosity, comfort, social recognition, or mixed motives. Practice can be stimulating, but commitment and clarity are not yet stable.",
+    "Madhyama-adhikārī": "The madhyama-adhikārī has more clarity and commitment. Doubts remain, but the goal is seen as achievable and practice begins to become steadier and more transformative.",
+    "Uttama-adhikārī": "The uttama-adhikārī has mature recognition and deep trust. Practice is joyful and natural, and the seeker can apply the teachings with purity of heart and steadiness.",
+    "Pratyabhijñā": "Pratyabhijñā is inner recognition: the seeker recognizes the ātmā's belonging to Śrī Hari. It is experiential rather than merely theoretical, and it can arise through grace from the satguru while still deepening over time.",
+    "Ātmā": "The ātmā is a living, conscious reality whose deepest identity is in relation to Śrī Hari. The text emphasizes that the ātmā's belonging to Hari is not an abstract idea but something to be recognized inwardly.",
+    "Jīva": "Jīva refers to the ātmā as embodied and conditioned by the gross and subtle body. It is the self as experienced within saṃsāra, not the self's purest identity.",
+    "Antaḥkaraṇa": "Antaḥkaraṇa is the inner instrument through which the jīva thinks, remembers, identifies, and decides. It includes manas, citta, ahaṅkāra, and buddhi.",
+    "Manas": "Manas is the mind's faculty of perception, doubt, and coordination. It receives impressions and moves between options.",
+    "Buddhi": "Buddhi is discernment and decision. It enables judgment, clarity, and philosophical discrimination.",
+    "Ahaṅkāra": "Ahaṅkāra is the ego-sense, the tendency to identify with 'I' and 'mine' in relation to body, mind, and experience.",
+    "Citta": "Citta is the storehouse of memory and impressions. It carries saṃskāras and conditions the mind's tendencies.",
+    "Saṃskāra": "Saṃskāras are deep impressions formed by experience and repeated action. They shape future perception, desire, and practice.",
+    "Vāsanā": "Vāsanās are subtle tendencies or desires that arise from past impressions and draw the jīva toward particular experiences.",
+    "Śrī Hari": "Śrī Hari is the Supreme Lord, the source and possessor of all qualities. The text identifies Him as satyam, jñānam, anantam, ānanda, and as the reality from whom manifestation, guidance, and grace proceed.",
+    "Sat-cit-ānanda": "Sat-cit-ānanda names existence, consciousness, and bliss. The text applies these as essential spiritual qualities, fully and independently in Śrī Hari and dependently in the individual self.",
+    "Svarūpa": "Svarūpa is the essential nature of a being. Śrī Hari's svarūpa is pure spiritual fullness; the ātmā's svarūpa is its own essential spiritual nature in relation to Him.",
+    "Svabhāva": "Svabhāva refers to inherent qualities that flow from an entity's svarūpa. The text distinguishes primary and secondary qualities and uses svabhāva to explain how qualities manifest without changing the essential nature.",
+    "Viśeṣaṇa": "Viśeṣaṇa means a qualifier or attribute, such as color, potency, knowledge, or beauty. It helps identify and describe the entity that possesses it.",
+    "Viśeṣya": "Viśeṣya is the qualified entity, the substantive that possesses attributes. For example, Śrī Hari is the viśeṣya who possesses unlimited auspicious qualities.",
+    "Viśiṣṭa": "Viśiṣṭa means the qualified whole: an entity understood together with its attributes. The text uses this to explain Śrī Hari as a qualified, complete reality, not an empty abstraction.",
+    "Śakti": "Śakti is power or causal capacity. The text explains it as the potency by which an entity produces effects, such as fire's capacity to burn or a seed's capacity to become a tree.",
+    "Māyā-śakti": "Māyā-śakti is the material potency, the basis for material manifestation. It is real as a potency but dependent on Śrī Hari.",
+    "Ātmatā-śakti": "Ātmatā-śakti denotes the domain of individual ātmās. It explains how conscious selves are related to Śrī Hari while remaining distinct dependent realities.",
+    "Jñāna-śakti": "Jñāna-śakti is the power of knowledge. In relation to Śrī Hari it signifies perfect knowing and consciousness.",
+    "Icchā-śakti": "Icchā-śakti is the power of will. It points to intention and sovereign volition in divine manifestation.",
+    "Kriyā-śakti": "Kriyā-śakti is the power of action, the potency by which will and knowledge become effective manifestation.",
+    "Bala": "Bala is strength, a divine quality that supports and sustains manifestation.",
+    "Vīrya": "Vīrya is potency or vigor, indicating unfailing power and capacity.",
+    "Tejas": "Tejas is radiance or brilliance, an illuminating divine quality.",
+    "Ojas": "Ojas is vital splendor or vigor, a concentrated form of energy and strength.",
+    "Ādi-puruṣa": "Ādi-puruṣa is the primordial manifestation of Śrī Hari, associated with Vāsudeva and the foundation of later manifestations.",
+    "Vyūha": "Vyūha refers to the fourfold expansion of Śrī Hari: Vāsudeva, Saṅkarṣaṇa, Pradyumna, and Aniruddha. These forms structure divine manifestation and cosmic function.",
+    "Vibhava": "Vibhava refers to divine descents or manifestations of the Lord into the world. The text connects these with avatāras and cosmic roles.",
+    "Antaryāmi": "Antaryāmi is Śrī Hari as the indwelling Lord, the inner controller and witness present within all beings.",
+    "Arca": "Arca is the consecrated form of Śrī Hari for worship. It gives the devotee a concrete form through which love, meditation, and service can be offered.",
+    "Nāma": "Nāma is the divine Name. The text treats Hari-nāma as a sonic manifestation that carries Hari's presence and allows recognition through chanting.",
+    "Sadāśiva": "Sadāśiva is described as a manifestation connected with Śiva, self-awareness, and divine function. It is understood in relation to the Lord's grace and cosmic order rather than as a separate supreme principle.",
+    "Śiva-tattva": "Śiva-tattva names Śiva's distinct divine category. The text honors Śiva as a great devotee and manifestation who participates in cosmic functions under the Lord's ultimate sovereignty.",
+    "Devī-tattva": "Devī-tattva includes Mahā-Lakṣmī and other divine feminine manifestations. These forms express grace, blessing, protection, and support for devotees.",
+    "Mahā-Lakṣmī": "Mahā-Lakṣmī dwells close to the Lord and mediates mercy, purification, and blessing. She is treated as a supreme divine consort and a motherly channel of grace.",
+    "Aṣṭa-Lakṣmī": "Aṣṭa-Lakṣmī refers to eight forms of Lakṣmī, each associated with a distinct kind of blessing, prosperity, nourishment, courage, or spiritual support.",
+    "Rādhā-tattva": "Rādhā-tattva presents Śrī Rādhā as the personification of devotion and grace. Her role is to promote loving relation to the Lord and deepen bhakti.",
+    "Yoga-māyā": "Yoga-māyā is the Lord's divine power that veils and reveals. It protects līlā and devotion by shaping perception without denying the underlying reality.",
+    "Āvaraṇa-vāda": "Āvaraṇa-vāda explains concealment: reality is covered by māyā's obscuring power, so the problem is misrecognition rather than nonexistence.",
+    "Pratibimba-vāda": "Pratibimba-vāda uses the analogy of reflection to explain relation between original, reflecting medium, and reflected appearance. It helps distinguish source, condition, and reflected manifestation.",
+    "Sātikārya-vāda": "Sātikārya-vāda explains cause and effect as related without reducing the effect to illusion. The effect depends on the cause, as a pot depends on clay, while still functioning as a distinct manifestation.",
+    "Āvaraṇa-śakti": "Āvaraṇa-śakti is the covering power of māyā. It obscures recognition of what is real and makes the self overlook its relation to Śrī Hari.",
+    "Vikṣepa-śakti": "Vikṣepa-śakti is the projecting power of māyā. After covering true recognition, it projects misleading appearances and mistaken identifications.",
+    "Prāṇa": "Prāṇa is the vital current centered in respiration and inward life force. It draws and sustains energy in the living body.",
+    "Apāna": "Apāna is the downward-moving current governing elimination and lower bodily functions.",
+    "Vyāna": "Vyāna distributes vital energy throughout the body and coordinates circulation of life force.",
+    "Samāna": "Samāna balances digestion and assimilation, especially in the abdominal region.",
+    "Udāna": "Udāna governs upward movement, speech, and transition, including the movement of life force at death.",
+    "Sūkṣma-śarīra": "The sūkṣma-śarīra is the subtle body. It includes the inner instrument, senses, prāṇas, and impressions that organize embodied experience beyond the gross body.",
+    "Kāraṇa-śarīra": "The kāraṇa-śarīra is the causal body or seed condition. It carries latent tendencies and karmic causes behind present embodiment.",
+    "Asmitā": "Asmitā is egoic misidentification: mistaking body and mind for the self.",
+    "Rāga": "Rāga is attachment to remembered pleasure and the desire to repeat it.",
+    "Dveṣa": "Dveṣa is aversion arising from remembered pain or discomfort.",
+    "Abhiniveśa": "Abhiniveśa is clinging to embodied existence and fear of death.",
+    "Bhakti": "Bhakti is not only emotion; it is loving orientation toward Śrī Hari that matures through knowledge, surrender, remembrance, worship, and grace.",
+    "Aparā-bhakti": "Aparā-bhakti is preparatory devotion. It may include practice, effort, and mixed motives, but it purifies the seeker and prepares the heart for higher devotion.",
+    "Parā-bhakti": "Parā-bhakti is mature devotion beyond ordinary material conditioning. It arises when love of Śrī Hari becomes steady, direct, and transformative.",
+    "Nāma-kīrtana": "Nāma-kīrtana is chanting or singing the divine Name. In this teaching, sound is not merely symbolic; it can become a living means of contact with Hari.",
+    "Smaraṇa": "Smaraṇa is remembrance of Śrī Hari. It keeps consciousness turned toward Him and deepens devotion through repeated recollection.",
+    "Śaraṇāgati": "Śaraṇāgati is surrender to Śrī Hari. It means entrusting oneself to Him while continuing sincere practice.",
+    "Guṇāvatāra": "Guṇāvatāra refers to manifestations of the Lord connected with cosmic qualities and their functions.",
+    "Puruṣāvatāra": "Puruṣāvatāra refers to manifestations connected with cosmic creation and the universes.",
+    "Vaikharī-vāk": "Vaikharī-vāk is audible, spoken language. It is the grossest level of speech and the final outward expression of subtler sound.",
+    "Madhyamā-vāk": "Madhyamā-vāk is mental speech: sound as inner thought and structured meaning before audible expression.",
+    "Paśyantī-vāk": "Paśyantī-vāk is the subtle visionary level of sound where word and meaning are not yet fully separated.",
+    "Parā-vāk": "Parā-vāk is the transcendent source of speech. It is closest to the primordial sonic presence from which the lower levels unfold."
+};
+
+const TOPIC_CONCEPTS = {
+    "Pramāṇa": "This belongs to epistemology: how reliable knowledge is received, tested, and grounded in perception, inference, witness-consciousness, lineage, and authoritative śabda.",
+    "Vāk": "This belongs to the doctrine of vāk, the graded manifestation of sound from transcendent source to subtle inner cognition and finally audible speech.",
+    "Tattva": "This belongs to ontology: the fundamental realities and potencies that explain the relation between Śrī Hari, the individual self, and the world.",
+    "Sambandha": "This explains relationship: how difference, non-difference, cause, effect, pervasion, and identity can coexist without collapsing one reality into another.",
+    "Lakṣaṇa": "This belongs to definition theory: how a thing is known either by its essential nature or by observable, incidental markers.",
+    "Vāda": "This is a doctrinal position used to explain causation, manifestation, transformation, and the status of the world in relation to Brahman or divine śakti.",
+    "Bhakti": "This belongs to devotion: the movement of consciousness, surrender, remembrance, practice, and grace by which the self turns toward Bhagavān.",
+    "Cosmology": "This belongs to cosmology: the structure of prakṛti, guṇas, karma, manifestation, bondage, and liberation.",
+    "Mind": "This belongs to inner psychology: the functions, impressions, tendencies, and modifications through which embodied experience is organized.",
+    "Guru": "This belongs to the guru-disciple path: the qualifications, faith, discernment, and transmission that make spiritual knowledge living and practical."
+};
+
+function termByName(term) {
+    return TERMS.find(t => t.term === term);
+}
+
+function conceptDefinition(item) {
+    if (!item) return '';
+    return TERM_CONCEPTS[item.term] || `${item.def}. ${TOPIC_CONCEPTS[item.topic] || ''}`;
+}
+
+function conceptHtml(item) {
+    return `<div class="concept-note"><strong>Concept:</strong> ${conceptDefinition(item)}</div>`;
+}
 
 // ════════════════════════════════
 //  STATE
@@ -436,6 +599,9 @@ let matchCorrect = 0;
 //  INIT
 // ════════════════════════════════
 function init() {
+    const subtitle = document.getElementById('termCountSubtitle');
+    if (subtitle) subtitle.textContent = `Tadatmya Vedanta Study Guide — ${TERMS.length} terms across ${TOPICS.length} topics`;
+
     // terms preview
     const preview = document.getElementById('termsPreview');
     TERMS.slice(0,20).forEach(t => {
@@ -516,7 +682,7 @@ function startQuiz() {
         ? [...TERMS]
         : TERMS.filter(t => selectedTopics.has(t.topic));
     if (pool.length < 4) pool = [...TERMS]; // fallback
-    shuffle(pool);
+    pool = shuffle(pool);
     const max = Math.min(questionCount, pool.length);
     questions = pool.slice(0, max);
     qIndex = 0; score = 0; history = [];
@@ -606,10 +772,7 @@ function renderSingleQuestion(area) {
 }
 
 function renderMCOptions(card, q, definitionToTerm) {
-    // gather 3 distractors
-    const pool = TERMS.filter(t => t.term !== q.term);
-    shuffle(pool);
-    const distractors = pool.slice(0, 3);
+    const distractors = getDistractors(q, 3);
     const choices = shuffle([q, ...distractors]);
 
     const wrap = document.createElement('div');
@@ -625,6 +788,30 @@ function renderMCOptions(card, q, definitionToTerm) {
     });
 
     card.appendChild(wrap);
+}
+
+function getDistractors(q, count) {
+    const sameTopic = shuffle(TERMS.filter(t => t.term !== q.term && t.topic === q.topic));
+    const otherTopics = shuffle(TERMS.filter(t => t.term !== q.term && t.topic !== q.topic));
+    const picked = [];
+    const used = new Set([q.term]);
+
+    function takeFrom(list, max) {
+        for (const item of list) {
+            if (picked.length >= count || max <= 0) break;
+            if (used.has(item.term)) continue;
+            picked.push(item);
+            used.add(item.term);
+            max--;
+        }
+    }
+
+    // Prefer one or two close confusers, then add broader variety from the whole study list.
+    takeFrom(sameTopic, Math.min(2, sameTopic.length));
+    takeFrom(otherTopics, count - picked.length);
+    takeFrom(shuffle(TERMS.filter(t => !used.has(t.term))), count - picked.length);
+
+    return picked.slice(0, count);
 }
 
 function selectOption(btn, q) {
@@ -752,15 +939,20 @@ function selectRight(rEl, batch) {
         area.dataset.totalCorrect = parseInt(area.dataset.totalCorrect || 0) + 1;
 
         // record each pair
+        const matchedItem = termByName(lEl.dataset.term);
         history.push({ term: lEl.dataset.term, correct: true, skipped: false,
-            userAnswer: lEl.dataset.term, correctAnswer: lEl.dataset.term });
+            userAnswer: lEl.dataset.term,
+            correctAnswer: matchedItem ? `${matchedItem.term}: ${matchedItem.def}` : lEl.dataset.term });
         qIndex++;
         updateProgress();
 
         // check if all matched
         const batchSize = parseInt(area.dataset.batchSize);
         if (matchCorrect >= batchSize) {
-            showFeedback('correct', `Perfect! All ${batchSize} pairs matched! 🎉`);
+            const matchedNotes = batch
+                .map(t => `<div class="concept-note"><strong>${t.term}:</strong> ${conceptDefinition(t)}</div>`)
+                .join('');
+            showFeedback('correct', `Perfect! All ${batchSize} pairs matched! 🎉${matchedNotes}`);
             document.getElementById('btnNext').classList.remove('hidden');
         }
     } else {
@@ -792,9 +984,9 @@ function checkAnswer() {
         input.classList.add(correct ? 'correct' : 'incorrect');
         if (correct) {
             score++;
-            showFeedback('correct', `✅ Correct! <strong>${q.term}</strong> — ${q.def}`);
+            showFeedback('correct', `✅ Correct! <strong>${q.term}</strong> — ${q.def}${conceptHtml(q)}`);
         } else {
-            showFeedback('incorrect', `❌ The answer is <strong>${q.term}</strong> — ${q.def}`);
+            showFeedback('incorrect', `❌ The answer is <strong>${q.term}</strong> — ${q.def}${conceptHtml(q)}`);
         }
         history.push({ term: q.term, correct, skipped: false, userAnswer: userVal, correctAnswer: q.term });
         lockAndAdvance();
@@ -815,9 +1007,9 @@ function checkAnswer() {
 
         if (correct) {
             score++;
-            showFeedback('correct', `✅ Correct! ${q.term} — ${q.def}`);
+            showFeedback('correct', `✅ Correct! ${q.term} — ${q.def}${conceptHtml(q)}`);
         } else {
-            showFeedback('incorrect', `❌ The correct answer is: ${expectedAnswer}`);
+            showFeedback('incorrect', `❌ The correct answer is: ${expectedAnswer}${conceptHtml(q)}`);
         }
         history.push({ term: q.term, correct, skipped: false,
             userAnswer: selected.textContent, correctAnswer: expectedAnswer });
@@ -886,10 +1078,12 @@ function showResults() {
     history.forEach(h => {
         const div = document.createElement('div');
         div.className = `review-item ${h.skipped ? 'skipped' : h.correct ? 'correct' : 'incorrect'}`;
+        const item = termByName(h.term);
         div.innerHTML = `
             <div class="review-result">${h.skipped ? '⏭ Skipped' : h.correct ? '✅ Correct' : '❌ Incorrect'}</div>
             <div><span class="review-term">${h.term}</span></div>
             <div style="color:#555;font-size:13px;">${h.correctAnswer}</div>
+            ${item ? conceptHtml(item) : ''}
             ${(!h.correct && !h.skipped) ? `<div style="color:#999;font-size:12px;margin-top:3px;">Your answer: ${h.userAnswer}</div>` : ''}
         `;
         list.appendChild(div);
